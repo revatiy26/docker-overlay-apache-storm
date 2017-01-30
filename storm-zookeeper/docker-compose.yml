@@ -1,0 +1,43 @@
+version: '2'
+
+services:
+
+ storm-zookeeper1:
+  build:
+   context: .
+   args:
+    - MYID=1
+    - SERVER1=0.0.0.0
+    - SERVER2=storm-zookeeper2
+    - SERVER3=storm-zookeeper3
+  container_name: storm-zookeeper1
+  networks:
+    - STORMNET
+
+ storm-zookeeper2:
+  build:
+   context: .
+   args:
+    - MYID=2
+    - SERVER1=storm-zookeeper1
+    - SERVER2=0.0.0.0
+    - SERVER3=storm-zookeeper3
+  container_name: storm-zookeeper2
+  networks:
+    - STORMNET
+
+ storm-zookeeper3:
+  build:
+   context: .
+   args:
+    - MYID=3
+    - SERVER1=storm-zookeeper1
+    - SERVER2=storm-zookeeper2
+    - SERVER3=0.0.0.0
+  container_name: storm-zookeeper3
+  networks:
+    - STORMNET
+
+networks:
+ STORMNET:
+  external: true
